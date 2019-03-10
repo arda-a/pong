@@ -49,7 +49,7 @@ VIRTUAL_HEIGHT = 243
 
 -- paddle movement speed
 PADDLE_SPEED = 200
-AI_PADDLE_SPEED = 100 --assume ai is worse than us.
+AI_PADDLE_SPEED = 100 --Let AI be slower
 
 --[[
     Called just once at the beginning of the game; used to set up
@@ -242,20 +242,19 @@ function love.update(dt)
         player1.dy = 0
     end
 
-    -- player 2 (AI Update)
-    -- The paddle should move towards the ball y coordinate.
-    -- The middle point of paddle should follow the ball.
-    if ball.y + ball.height < (player2.y + player2.height) / 2 then
-        player2.dy = -AI_PADDLE_SPEED
-    elseif ball.y + ball.height > (player2.y + player2.height) / 2 then
-        player2.dy = AI_PADDLE_SPEED
-    else
-        player2.dy = 0
-    end
-
     -- update our ball based on its DX and DY only if we're in play state;
     -- scale the velocity by dt so movement is framerate-independent
     if gameState == 'play' then
+        -- player 2 (AI Update)
+        -- The paddle should move towards the ball y coordinate.
+        -- The middle point of paddle should follow the ball.
+        if ball.y + ball.height < player2.y + player2.height / 2 then
+            player2.dy = -AI_PADDLE_SPEED
+        elseif ball.y + ball.height > player2.y + player2.height / 2 then
+            player2.dy = AI_PADDLE_SPEED
+        else
+            player2.dy = 0
+        end
         ball:update(dt)
     end
 
